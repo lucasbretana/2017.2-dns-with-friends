@@ -1,0 +1,21 @@
+[ DOING ] interface of the start
+  [ TODO ] parameters interpretation
+
+[ DOING ] offline commands
+  [ DOING ] read
+  [ DOING ] interprete them
+
+[ TODO ] DNS server implementation
+  [ TODO ] request commands
+    [ TODO ] DNS_CONSULT
+      [ DONE ] plan it
+      [ TODO ] protocol
+      [ TODO ] read answer them
+    [ TODO ] DNS_UPDATE ]
+      [ DONE ] plan it
+      [ TODO ] protocol
+      [ TODO ] read answer them
+    [ TODO ] ADD_FRIEND
+      [ DONE ] plan it
+      [ TODO ] protocol
+      [ TODO ] read answer them
