@@ -6,41 +6,43 @@
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 Command	edu/dnswithfriends/serverside/dns/Command.java	/^  public Command() throws UnsupportedOperationException {$/;"	m	class:Command
 Command	edu/dnswithfriends/serverside/dns/Command.java	/^public class Command {$/;"	c
-Config	edu/dnswithfriends/serverside/dns/Config.java	/^  public Config(String n, T t) throws UnsupportedOperationException {$/;"	m	class:Config
-Config	edu/dnswithfriends/serverside/dns/Config.java	/^public class Config<T>{$/;"	c
-DnsServer	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  public DnsServer() throws UnsupportedOperationException{$/;"	m	class:DnsServer
+Config	edu/dnswithfriends/serverside/dns/config/Config.java	/^public abstract class Config<T> {$/;"	c
+DnsServer	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  public DnsServer() throws UnsupportedOperationException {$/;"	m	class:DnsServer
 DnsServer	edu/dnswithfriends/serverside/dns/DnsServer.java	/^public class DnsServer implements Runnable {$/;"	c
-N	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final Character N = new Character('N');$/;"	f	class:ServerSide
-N_	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final Character N_ = new Character('n');$/;"	f	class:ServerSide
-ServerSide	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public ServerSide(){$/;"	m	class:ServerSide
-ServerSide	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public ServerSide(boolean confirm_first){$/;"	m	class:ServerSide
-ServerSide	edu/dnswithfriends/serverside/ui/ServerSide.java	/^public class ServerSide{$/;"	c
-Y	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final Character Y = new Character('Y');$/;"	f	class:ServerSide
-Y_	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final Character Y_ = new Character('y');$/;"	f	class:ServerSide
-cast	edu/dnswithfriends/serverside/dns/Config.java	/^  public E cast(String op) throws UnsupportedOperationException{$/;"	m	class:Config
+FriendsConfig	edu/dnswithfriends/serverside/dns/config/FriendsConfig.java	/^public class FriendsConfig<Integer> extends Config<Integer> {$/;"	c
+N	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final Character N = new Character('N');$/;"	f	class:ServerSideUI
+N_	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final Character N_ = new Character('n');$/;"	f	class:ServerSideUI
+ServerSideUI	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public ServerSideUI (){$/;"	m	class:ServerSideUI
+ServerSideUI	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public ServerSideUI (boolean confirm_first){$/;"	m	class:ServerSideUI
+ServerSideUI	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^public class ServerSideUI {$/;"	c
+Y	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final Character Y = new Character('Y');$/;"	f	class:ServerSideUI
+Y_	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final Character Y_ = new Character('y');$/;"	f	class:ServerSideUI
 configs	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  private ArrayList<Config> configs = null;$/;"	f	class:DnsServer	file:
-dns_server	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  private DnsServer dns_server = null;$/;"	f	class:ServerSide	file:
-edu.dnswithfriends.serverside.dns	edu/dnswithfriends/serverside/dns/Config.java	/^package edu.dnswithfriends.serverside.dns;$/;"	p
+dns_server	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  private DnsServer dns_server = null;$/;"	f	class:ServerSideUI	file:
 edu.dnswithfriends.serverside.dns	edu/dnswithfriends/serverside/dns/DnsServer.java	/^package edu.dnswithfriends.serverside.dns;$/;"	p
-edu.dnswithfriends.serverside.ui	edu/dnswithfriends/serverside/ui/ServerSide.java	/^package edu.dnswithfriends.serverside.ui;$/;"	p
-err	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final PrintStream err = System.err;$/;"	f	class:ServerSide
+edu.dnswithfriends.serverside.dns.config	edu/dnswithfriends/serverside/dns/config/Config.java	/^package edu.dnswithfriends.serverside.dns.config;$/;"	p
+edu.dnswithfriends.serverside.dns.config	edu/dnswithfriends/serverside/dns/config/FriendsConfig.java	/^package edu.dnswithfriends.serverside.dns.config;$/;"	p
+edu.dnswithfriends.serverside.ui	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^package edu.dnswithfriends.serverside.ui;$/;"	p
+err	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final PrintStream err = System.err;$/;"	f	class:ServerSideUI
 forEachConfig	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  public static void forEachConfig(Consumer<Config> action) throws UnsupportedOperationException {$/;"	m	class:DnsServer
-keyboard	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final Scanner keyboard = new Scanner(System.in);$/;"	f	class:ServerSide
-kill	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  private void kill() throws UnsupportedOperationException {$/;"	m	class:ServerSide	file:
+keyboard	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final Scanner keyboard = new Scanner(System.in);$/;"	f	class:ServerSideUI
+kill	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  private void kill() throws UnsupportedOperationException {$/;"	m	class:ServerSideUI	file:
 listConfigs	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  public static void listConfigs(java.io.PrintStream out) throws UnsupportedOperationException {$/;"	m	class:DnsServer
-main	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static void main(String...args) {$/;"	m	class:ServerSide
+main	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static void main(String...args) {$/;"	m	class:ServerSideUI
 n_consult	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  static private long n_consult = 1;$/;"	f	class:DnsServer	file:
 n_friends	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  static private int n_friends = -1;$/;"	f	class:DnsServer	file:
-name	edu/dnswithfriends/serverside/dns/Config.java	/^  private String name = null;$/;"	f	class:Config	file:
-name	edu/dnswithfriends/serverside/dns/Config.java	/^  public String name(){ return this.name; }$/;"	m	class:Config
-out	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  public static final PrintStream out = System.out;$/;"	f	class:ServerSide
-override	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  private void override() throws UnsupportedOperationException {$/;"	m	class:ServerSide	file:
-readCommands	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  private void readCommands(){$/;"	m	class:ServerSide	file:
-restart	edu/dnswithfriends/serverside/ui/ServerSide.java	/^  private void restart() throws UnsupportedOperationException {$/;"	m	class:ServerSide	file:
+name	edu/dnswithfriends/serverside/dns/config/Config.java	/^  private String name = null;$/;"	f	class:Config	file:
+name	edu/dnswithfriends/serverside/dns/config/Config.java	/^  public String name(){ return this.name; }$/;"	m	class:Config
+out	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  public static final PrintStream out = System.out;$/;"	f	class:ServerSideUI
+override	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  private void override() throws UnsupportedOperationException {$/;"	m	class:ServerSideUI	file:
+readCommands	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  private void readCommands(){$/;"	m	class:ServerSideUI	file:
+restart	edu/dnswithfriends/serverside/ui/ServerSideUI.java	/^  private void restart() throws UnsupportedOperationException {$/;"	m	class:ServerSideUI	file:
 run	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  public void run() throws UnsupportedOperationException {$/;"	m	class:DnsServer
 server.dns	edu/dnswithfriends/serverside/dns/Command.java	/^package server.dns;$/;"	p
-setName	edu/dnswithfriends/serverside/dns/Config.java	/^  public void setName(String n) {$/;"	m	class:Config
-setValue	edu/dnswithfriends/serverside/dns/Config.java	/^  public void setValue(T v) {$/;"	m	class:Config
+set	edu/dnswithfriends/serverside/dns/config/Config.java	/^  public abstract void set(String conf);$/;"	m	class:Config
+set	edu/dnswithfriends/serverside/dns/config/Config.java	/^  public void set(T v) {$/;"	m	class:Config
+set	edu/dnswithfriends/serverside/dns/config/FriendsConfig.java	/^  public void set(String conf){$/;"	m	class:FriendsConfig
+setName	edu/dnswithfriends/serverside/dns/config/Config.java	/^  public void setName(String n) {$/;"	m	class:Config
 single_ans	edu/dnswithfriends/serverside/dns/DnsServer.java	/^  static private boolean single_ans = true;$/;"	f	class:DnsServer	file:
-value	edu/dnswithfriends/serverside/dns/Config.java	/^  private T value = null;$/;"	f	class:Config	file:
-value	edu/dnswithfriends/serverside/dns/Config.java	/^  public T value() { return this.value; };$/;"	m	class:Config
+value	edu/dnswithfriends/serverside/dns/config/Config.java	/^  private T value = null;$/;"	f	class:Config	file:
+value	edu/dnswithfriends/serverside/dns/config/Config.java	/^  public T value() { return this.value; };$/;"	m	class:Config

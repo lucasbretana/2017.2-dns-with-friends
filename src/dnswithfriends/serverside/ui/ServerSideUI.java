@@ -1,12 +1,13 @@
-package edu.dnswithfriends.serverside.ui;
+package dnswithfriends.serverside.ui;
 
-import edu.dnswithfriends.serverside.dns.DnsServer;
+import dnswithfriends.serverside.dns.DnsServer;
+import dnswithfriends.serverside.dns.config.Config;
 
 import java.io.PrintStream;
 import java.util.Scanner;
 import java.lang.UnsupportedOperationException;
 
-public class ServerSide{
+public class ServerSideUI {
 
   public static final PrintStream out = System.out;
   public static final PrintStream err = System.err;
@@ -19,15 +20,15 @@ public class ServerSide{
 
   private DnsServer dns_server = null;
 
-  public ServerSide(){
+  public ServerSideUI (){
     this.dns_server = new DnsServer();
     dns_server.run();
   }
 
-  public ServerSide(boolean confirm_first){
+  public ServerSideUI (boolean confirm_first){
     if(!confirm_first) {
       this.out.println("The current DNS server configuration is: ");
-      this.dns_server.listConfigs(this.out);
+      DnsServer.listConfigs(this.out);
       this.dns_server = new DnsServer();
       this.dns_server.run(); // Start the other thread
       
@@ -40,7 +41,8 @@ public class ServerSide{
     while((ans.equals(Y)) || (ans.equals(Y_))){
       this.out.println("Okay, lets review it.");
       this.out.println("The current DNS server configuration is: ");
-      this.dns_server.listConfigs(this.out);
+      DnsServer.listConfigs(this.out);
+
       this.out.println("Change? (y/n)");
       ans = keyboard.useDelimiter("").next().toCharArray()[0];
       
@@ -51,9 +53,9 @@ public class ServerSide{
         readCommands();
       }
 
-      DnsServer.forEachConfig(c -> {
+      DnsServer.forEachConfig((Config c) -> {
         this.out.println("The \"" + c.name() + "\" is set to \"" + c.value() + "\", change it: (blank to keep it)");
-        //TODO: fix this cast :: c.set(keyboard.next());
+        c.set(keyboard.next());
       });
     }
   }

@@ -1,4 +1,4 @@
-package server.dns;
+package dnswithfriends.serverside.dns;
 
 import java.lang.UnsupportedOperationException;
 
