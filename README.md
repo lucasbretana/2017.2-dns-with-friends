@@ -5,9 +5,10 @@ This aplication simulates a DNS server.
 
 # Server side
 The server can answer ------ requestion  
-  - DNS_CONSULT : the client requests the name/IP of a given IP/name  
-  - DNS_UPDATE : the client is acctually another server with an IP/name update  
-  - ADD_FRIEND : another server wants to present himself as a DNS friend  
+  - DNS CONSULT : the client requests the name/IP of a given IP/name  
+  - DNS UPDATE : the client is acctually another server with an IP/name update  
+  - FRIEND ADD : another server wants to present himself as a DNS friend  
+  - FRIEND RM : remove a server from the DNS friends
   - ...
 
 
@@ -19,8 +20,8 @@ The server can answer ------ requestion
 "
 
 "
-# DNS_CONSULT request format
-DNS_CONSULT -ip -d 5 -n 2  
+# DNS CONSULT request format
+DNS CONSULT -ip -d 5 -n 2  
 lucasbretana.servebeer.com
 menescraft.serveminecraft.net  
 "

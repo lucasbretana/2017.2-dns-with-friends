@@ -1,22 +1,14 @@
 package dnswithfriends.serverside.ui;
 
+import dnswithfriends.protocol.IO;
 import dnswithfriends.serverside.dns.DnsServer;
 import dnswithfriends.serverside.dns.config.Config;
 
-import java.io.PrintStream;
 import java.util.Scanner;
+
 import java.lang.UnsupportedOperationException;
 
 public class ServerSideUI {
-
-  public static final PrintStream out = System.out;
-  public static final PrintStream err = System.err;
-  public static final Scanner keyboard = new Scanner(System.in);
-
-  public static final Character Y = new Character('Y');
-  public static final Character Y_ = new Character('y');
-  public static final Character N = new Character('N');
-  public static final Character N_ = new Character('n');
 
   private DnsServer dns_server = null;
 
@@ -27,26 +19,26 @@ public class ServerSideUI {
 
   public ServerSideUI (boolean confirm_first){
     if(!confirm_first) {
-      this.out.println("The current DNS server configuration is: ");
-      DnsServer.listConfigs(this.out);
+      IO.out.println("The current DNS server configuration is: ");
+      DnsServer.listConfigs(IO.out);
       this.dns_server = new DnsServer();
       this.dns_server.run(); // Start the other thread
       
       readCommands();
     }
   
-    Character ans = Y;
+    Character ans = IO.Y;
 
     // While there are changes to do, to it
-    while((ans.equals(Y)) || (ans.equals(Y_))){
-      this.out.println("Okay, lets review it.");
-      this.out.println("The current DNS server configuration is: ");
-      DnsServer.listConfigs(this.out);
+    while((ans.equals(IO.Y)) || (ans.equals(IO.Y_))){
+      IO.out.println("Okay, lets review it.");
+      IO.out.println("The current DNS server configuration is: ");
+      DnsServer.listConfigs(IO.out);
 
-      this.out.println("Change? (y/n)");
-      ans = keyboard.useDelimiter("").next().toCharArray()[0];
+      IO.out.println("Change? (y/n)");
+      ans = IO.keyboard.useDelimiter("").next().toCharArray()[0];
       
-      if((ans.equals(N)) || (ans.equals(N_))){
+      if((ans.equals(IO.N)) || (ans.equals(IO.N_))){
         this.dns_server = new DnsServer();
         this.dns_server.run(); // Start the other thread
 
@@ -54,8 +46,8 @@ public class ServerSideUI {
       }
 
       DnsServer.forEachConfig((Config c) -> {
-        this.out.println("The \"" + c.name() + "\" is set to \"" + c.value() + "\", change it: (blank to keep it)");
-        c.set(keyboard.next());
+        IO.out.println("The \"" + c.name() + "\" is set to \"" + c.value() + "\", change it: (blank to keep it)");
+        c.set(IO.keyboard.next());
       });
     }
   }
@@ -71,7 +63,7 @@ public class ServerSideUI {
         case "/restart": restart(); break;
         case "/override": override(); break;
         default:
-          this.err.println("Unkoun command \"" + cmd.toString() + "\". Seak the manual.");
+          IO.println("Unkoun command \"" + cmd.toString() + "\". Seak the manual.");
       }
 
     }
