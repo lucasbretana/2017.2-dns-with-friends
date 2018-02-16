@@ -8,7 +8,7 @@ abstract public class Receiver implements Protocolable {
 
   abstract public void read();
 
-  abstract public void receive();
+  //abstract public void receive();
 
   public String getRawMessage(){
     return this.msg;

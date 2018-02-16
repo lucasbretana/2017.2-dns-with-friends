@@ -15,5 +15,6 @@ public interface IO {
   public static final Character N_ = new Character('n');
 
   public static final Character SPACE = ' ';
+  public static final Character ENTER = '\n';
 }
 

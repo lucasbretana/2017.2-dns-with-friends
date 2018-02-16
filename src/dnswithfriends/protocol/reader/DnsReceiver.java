@@ -56,6 +56,10 @@ public class DnsReceiver extends Receiver {
     // the first part can be ignored, it is a DNS
     String tokens[] = line.split(IO.SPACE.toString());
     System.out.println("DEBUG: in DNS class, found \"" + tokens[i] + "\" wich is " + ( tokens[i].equals("DNS") ? " OK " : " NOT OK "  ));
+    if(!tokens[0].equals("DNS")) {
+      System.err.println("DNS RECEIVER: Error!\nUnknow request. Identification is: " + tokens[0].toString() + "\tUnkown! Killing it.");
+      System.exit(10);
+    }
     ++i;
     this.consult = tokens[i].equals(DnsReceiver.CONSULT);
     ++i;
@@ -85,16 +89,10 @@ public class DnsReceiver extends Receiver {
       }catch (IOException ioE){
         System.out.println("Error reading from the message!");
         ioE.printStackTrace();
+        System.exit(1);
       }
     }
     
-  }
-
-  /**
-   * Shall receive the message from the other side
-   */
-  @Override
-  public void receive(){
   }
 
 

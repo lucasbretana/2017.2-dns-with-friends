@@ -63,7 +63,7 @@ public class ServerSideUI {
         case "/restart": restart(); break;
         case "/override": override(); break;
         default:
-          IO.println("Unkoun command \"" + cmd.toString() + "\". Seak the manual.");
+          IO.out.println("Unkoun command \"" + cmd.toString() + "\". Seak the manual.");
       }
 
     }
