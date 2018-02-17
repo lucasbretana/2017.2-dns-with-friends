@@ -1,4 +1,4 @@
-package dnswithfriends.protocol.writer;
+package dnswithfriends.out;
 
 import java.lang.UnsupportedOperationException;
 
