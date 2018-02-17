@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 public interface Protocolable {
   public static final String ipv4_format = "\\b((25[0–5]|2[0–4]\\d|[01]?\\d\\d?)(\\.)){3}(25[0–5]|2[0–4]\\d|[01]?\\d\\d?)\\b";
   public static final int port_top = 65535;
-  public static final String REMOVE = "RM";
-  public static final String ADD = "ADD";
   
   /**
    * Just check if the IP is in the right format (0-255].[0-255].[0-255].[0-255]
