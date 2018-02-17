@@ -1,4 +1,4 @@
-package dnswithfriends.protocol.reader;
+package dnswithfriends.in;
 
 import dnswithfriends.protocol.IO;
 
