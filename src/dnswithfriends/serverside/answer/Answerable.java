@@ -1,5 +1,6 @@
 package dnswithfriends.serverside.answer;
 
+import java.util.List;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -11,9 +12,6 @@ import dnswithfriends.protocol.Protocolable;
 import dnswithfriends.serverside.answer.DnsConsult;
 
 public interface Answerable extends Protocolable{
-  public String header = null;
-
-
   /**
    * This method should be called when it's make a re-consult
    * The answer will be sent here to be creted the aproprieted class
@@ -42,6 +40,13 @@ public interface Answerable extends Protocolable{
   }
   
   
+  default public boolean haveAnswer(){
+    return false;
+  }
+
+  default public List<String> getAnswer(){
+    return null;
+  }
 
   //@Override
   //default public String toString(){
