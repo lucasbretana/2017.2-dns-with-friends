@@ -7,9 +7,10 @@ import java.io.IOException;
 
 import dnswithfriends.util.Util;
 import dnswithfriends.protocol.IO;
+import dnswithfriends.protocol.Protocolable;
 import dnswithfriends.serverside.answer.DnsConsult;
 
-public interface Answerable {
+public interface Answerable extends Protocolable{
   public String header = null;
 
 
@@ -35,14 +36,9 @@ public interface Answerable {
     int curIdx = 0;
     String tokens[] = firstLine.split(IO.SPACE.toString());
     if(tokens[curIdx++].equalsIgnoreCase(DnsConsult.HEADER)) {
-      final int f_idx = curIdx++;
-      if(Util.anyMatch(DnsConsult.listID, i -> i.equals(tokens[f_idx]))){
-        return new DnsConsult(askedServer);
-      }else{
-        throw new Exception("Unknow kind of " + DnsConsult.HEADER + "(\"" + tokens[curIdx].toString()  + "\")");
-      }
+      return new DnsConsult(in);
     }
-    return null;
+    throw new Exception("Unknow kind of request (\"" + tokens[curIdx].toString()  + "\")");
   }
   
   
