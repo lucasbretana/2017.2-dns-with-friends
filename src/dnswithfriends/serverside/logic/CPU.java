@@ -23,6 +23,8 @@ public class CPU extends Thread {
       ConsultThread c = null;
       try{
         c = new ConsultThread(this.listener.accept());
+        this.connectedClient.add(c);
+        c.run();
       }catch(IOException ioE){
         System.err.println("Could not accept a new client.");
         ioE.printStackTrace();
@@ -33,8 +35,6 @@ public class CPU extends Thread {
         System.exit(99);
       }
 
-      this.connectedClient.add(c);
-      c.run();
     }
   }
 }
