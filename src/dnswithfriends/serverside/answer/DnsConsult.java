@@ -125,7 +125,7 @@ public class DnsConsult implements Answerable {
       ioE.printStackTrace();
       System.exit(9);
     }catch(Exception e){
-      System.err.println("Badly formed message. Expected: <" + HEADER + "> <" + FOUND + ">" + IO.ENTER.toString() + "<number>\nFound numer ==\"" + line + "\"");
+      System.err.println("Badly formed message. Expected: <" + HEADER + "> <" + FOUND + ">" + IO.LINE_SEPARATOR.toString() + "<number>\nFound numer ==\"" + line + "\"");
       e.printStackTrace();
       System.exit(5);
     }

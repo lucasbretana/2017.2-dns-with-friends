@@ -15,6 +15,6 @@ public class Ack implements Answerable {
 
   @Override
   public String toString(){
-    return this.header + IO.ENTER + "ACK";
+    return this.header + IO.LINE_SEPARATOR + "ACK";
   }
 }

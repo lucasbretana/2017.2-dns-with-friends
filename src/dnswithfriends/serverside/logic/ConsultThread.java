@@ -11,8 +11,10 @@ import dnswithfriends.serverside.request.DnsRequest;
 public class ConsultThread extends Thread {
   private Socket client = null;
   private Requestable req = null;
+  private CPU father = null;
   
-  public ConsultThread(Socket client) {
+  public ConsultThread(CPU c, Socket client) {
+    this.father = c;
     this.client = client;
   }
 
@@ -21,8 +23,26 @@ public class ConsultThread extends Thread {
     try{
       this.req = Requestable.createRequest(client.getInputStream());
 
-      boolean b = req.isA();
-      System.out.println("DEBUG: " + b);
+      //TODO: continue from here
+      // now its time to process the request according to its type
+      if(this.req instanceof DnsRequest){
+        DnsRequest dR = (DnsRequest)this.req;
+        //DNS REQUEST PROCESS
+        if(dR.isConsultByIp()){
+          for(String s : dR.getList()) {
+            Entry aux = new Entry(
+           for(Entry e : father.getList()){
+             if(
+           }
+          }
+        }
+
+      }else if(this.req instanceof FriendRequest){
+        FriendRequest fR = (FriendRequest)this.req;
+        // FRIEND REQUEST PROCESS
+      }else{
+        System.err.println("Unknow request. Skipping.");
+      }
     }catch(IOException ioE){
       System.err.println("Could not load message.");
       ioE.printStackTrace();
@@ -32,6 +52,7 @@ public class ConsultThread extends Thread {
       e.printStackTrace();
       System.exit(55);
     }
+    System.out.println(this.req.toString());
   }
 }
 

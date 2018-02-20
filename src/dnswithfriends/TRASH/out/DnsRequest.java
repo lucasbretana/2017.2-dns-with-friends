@@ -27,7 +27,7 @@ public class DnsRequest extends Sender {
   private Integer deepth = null;
   private Integer n_consult = null;
 
-  List<String> consultList = null;
+  private List<String> consultList = null;
 
   private BufferedWriter out = null;
 
@@ -61,6 +61,10 @@ public class DnsRequest extends Sender {
       ioE.printStackTrace();
       System.exit(1);
     }
+  }
+
+  public List<String> requestList(){
+    return this.consultList;
   }
 
 }

@@ -1,20 +1,28 @@
 package dnswithfriends.serverside.logic;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.io.IOException;
 
 import dnswithfriends.serverside.logic.ConsultThread;
+import dnswithfriends.serverside.logic.Friend;
 
 public class CPU extends Thread {
   
-  ServerSocket listener = null;
-  List<ConsultThread> connectedClient = null;
+  private ServerSocket listener = null;
+  private List<ConsultThread> connectedClient = null;
+
+  protected List<Friend> friendList = null;
+  protected List<Entry> database = null;
 
   public CPU(int port) throws IOException {
-    this.listener = new ServerSocket(port);
-    this.connectedClient = null;
+    listener = new ServerSocket(port);
+    setName("Listener");
+    connectedClient = new ArrayList<ConsultThread>();
+    friendList = new ArrayList<Friend>();
+    database = new ArrayList<Entry>();
   }
 
   @Override
@@ -24,7 +32,7 @@ public class CPU extends Thread {
       try{
         c = new ConsultThread(this.listener.accept());
         this.connectedClient.add(c);
-        c.run();
+        c.start();
       }catch(IOException ioE){
         System.err.println("Could not accept a new client.");
         ioE.printStackTrace();

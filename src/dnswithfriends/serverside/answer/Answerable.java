@@ -31,12 +31,10 @@ public interface Answerable extends Protocolable{
       System.exit(1);
     }
 
-    int curIdx = 0;
-    String tokens[] = firstLine.split(IO.SPACE.toString());
-    if(tokens[curIdx++].equalsIgnoreCase(DnsConsult.HEADER)) {
+    if(firstLine.equalsIgnoreCase(DnsConsult.HEADER)) {
       return new DnsConsult(in);
     }
-    throw new Exception("Unknow kind of request (\"" + tokens[curIdx].toString()  + "\")");
+    throw new Exception("Unknow kind of request (\"" + firstLine.toString()  + "\")");
   }
   
   
