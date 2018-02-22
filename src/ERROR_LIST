@@ -1,0 +1,6 @@
+10 - server cannot accept a new client, IOException throw by the acept() method of the class ServerSocker
+20 - server cannot read from a new client, IOExceotion throw by the readLine() method from the class BufferedReader
+
+301 - Invalid message
+
+-1 - Real errors, e.g., a text could not be converted to a string
