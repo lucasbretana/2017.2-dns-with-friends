@@ -1,5 +1,8 @@
 package dnswithfriends.serverside.data;
 
+/**
+ * Describes one entry on the table of know hosts
+ */
 public class Entry{
   private String ip = null;
   private String name = null;

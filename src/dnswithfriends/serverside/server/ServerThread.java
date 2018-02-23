@@ -20,6 +20,9 @@ import dnswithfriends.serverside.data.Entry;
 
 import dnswithfriends.util.Util;
 
+/**
+ * The resposable class to take care of a new request
+ */
 public class ServerThread extends Thread{
   static private int count = 0;
   private Socket connection = null;
@@ -28,6 +31,11 @@ public class ServerThread extends Thread{
   private String message = null;
   private Server server = null;
 
+  /**
+   * Creates the ServerThread with its information about the request
+   * @param server a refence to the main server, where is the data
+   * @param conn the connection with the client
+   */
   public ServerThread(Server server, Socket conn) throws IOException{
     this.server = server;
     this.connection = conn;
@@ -36,6 +44,11 @@ public class ServerThread extends Thread{
     setName("ServerThread, aka, client #" + ServerThread.count++);
   }
 
+  /**
+   * Sets the message to send to the client from a file
+   * @param f the file
+   */
+  @Deprecated
   public void setMessage(File f) throws IOException{
     List<String> lines = java.nio.file.Files.readAllLines(f.toPath());
     String message = "";
@@ -45,130 +58,201 @@ public class ServerThread extends Thread{
     this.message = message;
   }
 
+  /**
+   * Sends the message to the client
+   */
   public void send() throws IOException{
     this.outputToClient.println(this.message);
   }
 
+  /**
+   * The behavior of the thread is described here
+   * It will try to read the many differentes formats of request
+   */
   @Override
   public void run(){
     while(true){
       String request = null;
       try{
         request = this.inputFromClient.readLine();
+        if(request.equalsIgnoreCase("DNS")){
+          dnsRequest();
+        }else if(request.equalsIgnoreCase("FRIEND")){
+          friendRequest();
+        }else{
+          System.err.println("Unkown request format:\n" + request);
+          System.err.println("Skipping.");
+        }
       }catch(IOException ioE){
         System.err.println("Could not read from the new client.");
         ioE.printStackTrace();
         System.exit(20);
       }
-      String tokens[] = request.split("\n");
-      if(tokens[0].equalsIgnoreCase("DNS")){
-        dnsRequest(tokens);
-      }else if(tokens[0].equalsIgnoreCase("FRIEND")){
-        friendRequest(tokens);
-      }else{
-        System.err.println("Unkown request format:\n" + request);
-        System.err.println("Skipping.");
-      }
     }
   }
 
+  /**
+   * Used to disconnection from the client
+   */
+  @Deprecated
   public void disconnect(String reason) throws IOException{
     this.message = "CLOSED\n" + reason;
     send();
   }
 
-  private void dnsRequest(String tokens[]){
-    List<Entry> list = this.server.getHosts();
-    String lineTokens[] = tokens[1].split(" ");
+  /**
+   * Read the rest of the message as a dnsRequest
+   */
+  private void dnsRequest() {
+    try{
+      List<Entry> listHosts = this.server.getHosts();
+      String line = this.inputFromClient.readLine();
+      String tokens[] = line.split(" ");
 
-    if(lineTokens[0].equals("CONSULT")){
-      boolean ip = lineTokens[1].equals("-ip");
-      boolean dns = !ip;
+      if(tokens[0].equals("CONSULT")){
+        boolean ip = tokens[1].equals("-ip");
+        boolean dns = !ip;
 
-      boolean deep = lineTokens[2].equals("-d");
-      Integer howDeep = null;
-      boolean iter = lineTokens[2].equals("-i");
+        boolean deep = tokens[2].equals("-d");
+        Integer howDeep = null;
+        boolean iter = tokens[2].equals("-i");
 
-      Integer numCon = 1;
-      if(deep){
-        howDeep = Integer.parseInt(lineTokens[3]);
+        Integer numCon = 1;
+        List<String> answers = new ArrayList<String>();
+        //System.out.println(""+ tokens[0] + " " + tokens[1] + " " + tokens[2] + " " + tokens[3] + " " + tokens[4] + " " + tokens[5]);
+        if(deep){
+          howDeep = Integer.parseInt(tokens[3]);
 
-        if(!lineTokens[4].equals("-n")){
-          System.err.println("Invalid request (\""+ tokens[1] + "\"");
+          if(!tokens[4].equals("-n")){
+            System.err.println("Invalid request.");
+            System.err.println("Skipping.");
+            return;
+          }
+
+          numCon = Integer.parseInt(tokens[5]);
+        }else if(iter){
+          if(!tokens[3].equals("-n")){
+            System.err.println("Invalid request.");
+            System.err.println("Skipping.");
+            return;
+          }
+
+          numCon = Integer.parseInt(tokens[4]);
+        }else{
+          System.err.println("Invalid request.");
+          System.err.println("Unkown mode: " + tokens[2]);
           System.err.println("Skipping.");
           return;
         }
 
-        numCon = Integer.parseInt(lineTokens[5]);
-      }else if(iter){
-        if(!lineTokens[3].equals("-n")){
-          System.err.println("Invalid request (\""+ tokens[1] + "\"");
-          System.err.println("Skipping.");
-          return;
+        //System.out.println("ip : " + ip + " - dns : " + dns + " - deep : " + deep + " - howDeep : " + howDeep + " - num : " + numCon);
+        List<String> consults = new ArrayList<String>();
+        for(int i=0 ; i<numCon; ++i){
+          line = this.inputFromClient.readLine();
+          consults.add(line);
         }
 
-        numCon = Integer.parseInt(lineTokens[4]);
-      }else{
-          System.err.println("Invalid request (\""+ tokens[1] + "\"");
-          System.err.println("Unkown mode: " + lineTokens[2]);
-          System.err.println("Skipping.");
-          return;
-      }
-
-      List<String> consults = new ArrayList<String>();
-      List<String> answers = new ArrayList<String>();
-      for(int i=2 ; i<numCon+2; ++i){
-        consults.add(tokens[i]);
-      }
-
-      boolean found = false;
-      if(ip){
-        for(String consult : consults){
-          found = false;
-          for(Entry e : list){
-            if(e.getIp().equals(consult)){
-              answers.add(e.getName());
-              found = true;
-              break;
+        if(ip){
+          boolean found = false;
+          for(String consult : consults){
+            found = false;
+            if(listHosts == null){
+              answers.add( (deep) ? "REPLACE" : "UNKOWN");
+            }else{
+              for(Entry e : listHosts){
+                if(e.getIp().equals(consult)){
+                  answers.add(e.getName());
+                  found = true;
+                  break;
+                }
+              }
+              if(!found)
+                answers.add("REPLACE");
             }
           }
-          if(!found)
-            answers.add("REPLACE");
-        }
-      }else if(dns){
-        for(String consult : consults){
-          found = false;
-          for(Entry e : list){
-            if(e.getName().equals(consult)){
-              answers.add(e.getIp());
-              found = true;
-              break;
+        }else if(dns){
+          boolean found = false;
+          for(String consult : consults){
+            found = false;
+            if(listHosts == null){
+              answers.add((deep) ? "REPLACE" : "UNKNOW");
+            }else{
+              for(Entry e : listHosts){
+                if(e.getName().equals(consult)){
+                  answers.add(e.getIp());
+                  found = true;
+                  break;
+                }
+              }
+              if(!found){
+                answers.add("REPLACE");
+              }
             }
           }
-          if(!found)
-            answers.add("REPLACE");
+        }else{
+          System.err.println("Invalid request");
+          System.err.println("Skipping.");
+          return;
         }
 
-        if(deep)
+        if((deep) && (howDeep > 1)){
           answers = replaceNotFound(ip, howDeep, answers);
+        }else if((howDeep != null) && (howDeep <= 1)){
+          answers.replaceAll(i -> (i.equals("REPLACE")) ? "UNKOWN" : i);
+        }else if(iter){
+          if(numCon == 1){
+            answers.clear();
+            answers.add((this.server.bestFriend() != null) ? this.server.bestFriend().getIp() : "UNKOWN");
+          }else{
+            for(String s : answers){
+              if(s.equals("REPLACE"))
+                answers.set(answers.indexOf(s), "UNKOWN");
+            }
+          }
+        }else{
+          System.err.println("FATAL");
+          System.exit(-8);
+        }
+
+        //Have the answet, mount the message and send it
+        String message = "DNS\n";
+        if((iter) && (answers.size() == 1))
+          message += "RETRY\n";
+        else{
+          message += "OK\n";
+          message += numCon + "\n";
+        }
+        for(String s : answers)
+          message += s + "\n";
+
+        this.outputToClient.println(message);
+
       }else{
-        System.err.println("Invalid request (\""+ tokens[1] + "\"");
+        System.err.println("Invalid request.");
+        System.err.println("Unkown DNS action.");
         System.err.println("Skipping.");
         return;
       }
-
-    }else{
-      System.err.println("Invalid request.");
-      System.err.println("Unkown DNS action: " + lineTokens[0]);
-      System.err.println("Skipping.");
-      return;
+    }catch(IOException ioE){
+      System.err.println("Error reading the request.");
+      System.exit(30);
     }
 
   }
 
+  /**
+   * Used to replace any not found infomation with the best solution for that consult
+   * @param byIp is the consult by IP
+   * @param deep how many friends can be asked
+   * @param answer the current information, may contain stuff to be replaced
+   */
   private List<String> replaceNotFound(boolean byIp, Integer deep, List<String> answer){
     --deep;
     Friend best = this.server.bestFriend();
+    if(best.equals(Server.defaultFriend)){
+      answer.replaceAll(i -> (i.equals("REPLACE")) ? "UNKOWN" : i);
+      return answer;
+    }
     Socket friendConn = null;
     try{
       friendConn = new Socket(best.getIp(), best.getPort());
@@ -194,21 +278,23 @@ public class ServerThread extends Thread{
 
           outputToFriend.println(message);
           String line = inputFromFriend.readLine();
-          String tokens[] = line.split("\n");
-          if(!tokens[0].equals("DNS")){
+          if(!line.equals("DNS")){
             System.err.println("Wrong message answer from friend server.");
             System.err.println("Unkown header: " + line);
             System.exit(-2);
           }
 
-          if(tokens[1].equals("ERROR")){
+          line = inputFromClient.readLine();
+          if(line.equals("ERROR")){
             answer.set(answer.indexOf(repAns), "UNKOWN");
-          }else if(tokens[1].equals("OK")){
-            if(!tokens[2].equals("1")){
+          }else if(line.equals("OK")){
+            line = inputFromClient.readLine();
+            if(!line.equals("1")){
               System.err.println("The friend server should not have more than one answer.");
               System.err.println("Just gonna skip everything after the first one.");
             }
-            answer.set(answer.indexOf(repAns), tokens[3]);
+            line = inputFromClient.readLine();
+            answer.set(answer.indexOf(repAns), line);
           }
         }
       }
@@ -220,36 +306,60 @@ public class ServerThread extends Thread{
     return answer;
   }
 
-  private void friendRequest(String tokens[]){
+  /**
+   * Read the rest of the request as a friendRequest
+   */
+  private void friendRequest() throws IOException{
     List<Friend> list = this.server.getFriends();
+    String line = this.inputFromClient.readLine();
     String lineTokens[] = null;
 
-    if(tokens[1].equals("ADD")){
-      lineTokens = tokens[2].split(" ");
+    if(line.equals("ADD")){
+      lineTokens = inputFromClient.readLine().split(" ");
       if(!Util.validateIp(lineTokens[0])){
         System.err.println("Invalid message from friend.");
         System.err.println("IP: " + lineTokens[0]);
         System.exit(301);
       }
       list.add(new Friend(lineTokens[0], Integer.parseInt(lineTokens[1])));
-    }else if(tokens[1].equalsIgnoreCase("UPDATE")){
+    }else if(line.equalsIgnoreCase("UPDATE")){
+      String line2 = this.inputFromClient.readLine();
+      String line3 = this.inputFromClient.readLine();
+      String line4 = this.inputFromClient.readLine();
       list.forEach(f ->
-         {
-          try{
-            if((f.getIp().equals(tokens[2])) && (f.getLastUpdate().before(DateFormat.getDateTimeInstance().parse(tokens[4]))))
-                f.replaceIp(tokens[3]);
-          }catch(ParseException pE){
-            pE.printStackTrace();
-            System.exit(-1);
+          {
+            try{
+              if((f.getIp().equals(line2)) && (f.getLastUpdate().before(DateFormat.getDateTimeInstance().parse(line4))))
+                f.replaceIp(line3);
+            }catch(ParseException pE){
+              pE.printStackTrace();
+              System.exit(-1);
+            }
           }
-         }
-        );
+          );
     }else{
       System.err.println("Invalid request.");
-      System.err.println("Unkown action: " + tokens[1]);
+      System.err.println("Unkown action: " + line);
       System.err.println("Skipping.");
     }
 
+  }
+
+  /**
+   * Used to kill the thread and free its resources
+   */
+  @Override
+  public void interrupt(){
+    try{
+      this.inputFromClient.close();
+      this.outputToClient.close();
+      this.connection.close();
+      super.interrupt();
+    }catch(IOException ioE){
+      System.err.println("Error closing the connection in " + this.getName());
+      System.err.println("Skipping.");
+      ioE.printStackTrace();
+    }
   }
 
 }
