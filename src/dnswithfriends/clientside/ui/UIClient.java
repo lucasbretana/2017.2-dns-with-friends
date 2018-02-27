@@ -31,7 +31,7 @@ public class UIClient{
 
         client.setMessage(new File(file_path));
         client.send();
-        client.read();
+        //client.read();
       }
     }catch(Exception e){
       System.err.println("Error on ui");

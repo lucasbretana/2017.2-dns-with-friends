@@ -54,7 +54,6 @@ public class Tester{
     responses_on = client.rawMessage();
     System.out.println("Test #2 : consult IPS in interactive, RETRY response\n" + ((compareLists(responses_off, responses_on) ? ANSI_GREEN + "PASSED" : ANSI_RED + "NOT PASSES")) + ANSI_RESET);
 
-    //TODO: add
     responses_off = java.nio.file.Files.readAllLines(new File("../resources/responses/" + "DNS-RESPONSE-OK-IPS-RESPONSES-2").toPath());
     client.setMessage(new File("../resources/requests/" + "DNS-CONSULT-DNS-DEEP-2-CONSULTS-2"));
     client.send();
@@ -70,6 +69,8 @@ public class Tester{
     }
     System.out.println("Test #4 : consult DNS in deep, return OK answers in IPS\n" + ((compareLists(responses_off, responses_on) ? ANSI_GREEN + "PASSED" : ANSI_RED + "NOT PASSES")) + ANSI_RESET);
     
+    server.interrupt();
+    client.close();
   }
 
   static private <T> boolean compareLists(List<T> list1, List<T> list2){

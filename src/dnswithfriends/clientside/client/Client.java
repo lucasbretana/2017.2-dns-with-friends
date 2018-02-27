@@ -50,6 +50,14 @@ public class Client {
     return this.lines;
   }
 
+  public void close(){
+    try{
+    this.connection.close();
+    }catch(Exception e){
+      ///shiiiii!!!
+    }
+  }
+
   private void clear(){
     this.lines = new ArrayList<String>();
     this.answers = new ArrayList<String>();

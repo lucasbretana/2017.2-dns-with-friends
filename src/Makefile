@@ -6,7 +6,7 @@ BIN = ../bin/
 SRC = src
 CP = ../bin/
 
-all: clear clientside serverside util abc doc
+all: clear clientside serverside util
 #-------------------------------
 #clientside
 clientside: clientside.client clientside.ui
