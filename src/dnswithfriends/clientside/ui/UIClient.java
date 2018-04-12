@@ -31,6 +31,7 @@ public class UIClient{
 
         client.setMessage(new File(file_path));
         client.send();
+        System.out.println("Got: " + client.rawMessage());
         //client.read();
       }
     }catch(Exception e){
